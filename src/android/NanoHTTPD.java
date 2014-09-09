@@ -891,7 +891,7 @@ public class NanoHTTPD
 
 			// XXX HACKHACK serve cordova.js from the containing folder
 			if (uri.equals("cordova.js")) {
-				url = "../cordova.js";	
+				uri = "../cordova.js";	
 			}
 		}
 
