@@ -67,6 +67,7 @@
 - (NSString *)documentRoot;
 - (NSString *)cordovajsRoot;
 - (void)setDocumentRoot:(NSString *)value;
+- (void)setCordovajsRoot:(NSString *)value;
 
 /**
  * The connection class is the class used to handle incoming HTTP connections.

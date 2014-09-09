@@ -22,10 +22,11 @@
 }
 
 - (id)initWithServer:(HTTPServer *)server documentRoot:(NSString *)documentRoot;
-- (id)initWithServer:(HTTPServer *)server documentRoot:(NSString *)documentRoot queue:(dispatch_queue_t)q;
+- (id)initWithServer:(HTTPServer *)server documentRoot:(NSString *)documentRoot queue:(dispatch_queue_t)q cordovajsRoot:(NSString *)cjsRoot;
 
 @property (nonatomic, unsafe_unretained, readonly) HTTPServer *server;
 @property (nonatomic, strong, readonly) NSString *documentRoot;
+@property (nonatomic, strong, readonly) NSString *cordovajsRoot;
 @property (nonatomic, readonly) dispatch_queue_t queue;
 
 @end

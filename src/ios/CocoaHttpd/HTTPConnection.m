@@ -1563,6 +1563,7 @@ static NSMutableArray *recentNonces;
 	// For example you may want to use a default file other than index.html, or perhaps support multiple types.
 	
 	NSString *documentRoot = [config documentRoot];
+	NSString *cordovajsRoot = [config cordovajsRoot];
 	
 	// Part 0: Validate document root setting.
 	// 
@@ -1652,8 +1653,9 @@ static NSMutableArray *recentNonces;
 	}
 
   NSLog(@"should return fullpath %@ for path %@, we can try %@", fullPath, path, [[cordovajsRoot stringByAppendingPathComponent:path] stringByStandardizingPath]);
+  NSLog(@"cordovajsRoot %@", cordovajsRoot);
   // XXX HACKHACK serve cordova.js from the containing folder
-  if ([path isEqualToString:@"/cordova.js"])
+  if ([path isEqualToString:@"/cordova.js"] || [path isEqualToString:@"/cordova_plugins.js"] || [path hasPrefix:@"/plugins/"])
     return [[cordovajsRoot stringByAppendingPathComponent:path] stringByStandardizingPath];
 
 	return fullPath;
