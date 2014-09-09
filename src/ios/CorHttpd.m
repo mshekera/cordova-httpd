@@ -21,6 +21,7 @@
 - (void)stopServer:(CDVInvokedUrlCommand*)command;
 - (void)getURL:(CDVInvokedUrlCommand*)command;
 - (void)getLocalPath:(CDVInvokedUrlCommand*)command;
+- (void)getCordovajsRoot:(CDVInvokedUrlCommand*)command;
 
 - (NSDictionary *)getIPAddresses;
 - (NSString *)getIPAddress:(BOOL)preferIPv4;
@@ -204,6 +205,12 @@
 {
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
                                                       messageAsString:(self.localPath ? self.localPath : @"")];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)getCordovajsRoot:(CDVInvokedUrlCommand*)command {
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                                      messageAsString:(self.cordovajsRoot ? self.cordovajsRoot : @"")];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
