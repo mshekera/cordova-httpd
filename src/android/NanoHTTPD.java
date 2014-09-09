@@ -888,6 +888,11 @@ public class NanoHTTPD
 			if ( uri.startsWith( ".." ) || uri.endsWith( ".." ) || uri.indexOf( "../" ) >= 0 )
 				res = new Response( HTTP_FORBIDDEN, MIME_PLAINTEXT,
 						"FORBIDDEN: Won't serve ../ for security reasons." );
+
+			// XXX HACKHACK serve cordova.js from the containing folder
+			if (uri.equals("cordova.js")) {
+				url = "../cordova.js";	
+			}
 		}
 
 		AndroidFile f = new AndroidFile( homeDir, uri );
