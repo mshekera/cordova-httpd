@@ -1651,10 +1651,10 @@ static NSMutableArray *recentNonces;
 		}
 	}
 
-  NSLog(@"should return fullpath %@ for path %@, we can try %@", fullPath, path, [[NSURL URLWithString:@"../cordova.js" relativeToURL:docRoot] relativePath]);
+  NSLog(@"should return fullpath %@ for path %@, we can try %@", fullPath, path, [[NSURL URLWithString:@"../cordova.js" relativeToURL:docRoot] absoluteURL]);
   // XXX HACKHACK serve cordova.js from the containing folder
   if ([path isEqualToString:@"/cordova.js"])
-    return [[NSURL URLWithString:@"../cordova.js" relativeToURL:docRoot] relativePath];
+    return [[NSURL URLWithString:@"../cordova.js" relativeToURL:docRoot] absoluteURL];
 
 	return fullPath;
 }
