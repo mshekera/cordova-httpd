@@ -116,8 +116,8 @@ public class CorHttpd extends CordovaPlugin {
     		//localPath = Environment.getExternalStorageDirectory().getAbsolutePath();
         	localPath = docRoot;
         } else {
-        	localPath = "file:///android_asset/www";
-        	//localPath = "www";
+        	//localPath = "file:///android_asset/www";
+        	localPath = "www";
         	if(docRoot.length()>0) {
         		localPath += "/";
         		localPath += docRoot;
