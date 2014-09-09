@@ -288,7 +288,7 @@ public class NanoHTTPD
 
 		try
 		{
-			new NanoHTTPD( port, new AndroidFile(wwwroot.getPath()) );
+			new NanoHTTPD( port, new AndroidFile(wwwroot.getPath()), null );
 		}
 		catch( IOException ioe )
 		{
