@@ -221,10 +221,11 @@ public class NanoHTTPD
 	 * Starts a HTTP server to given port.<p>
 	 * Throws an IOException if the socket is already in use
 	 */
-	public NanoHTTPD( int port, AndroidFile wwwroot ) throws IOException
+	public NanoHTTPD( int port, AndroidFile wwwroot, AndroidFile cordovaRoot ) throws IOException
 	{
 		myTcpPort = port;
 		this.myRootDir = wwwroot;
+		this.cordovaRoot = cordovaRoot;
 		myServerSocket = new ServerSocket( myTcpPort );
 		myThread = new Thread( new Runnable()
 		{
@@ -858,6 +859,7 @@ public class NanoHTTPD
 	private final ServerSocket myServerSocket;
 	private Thread myThread;
 	private AndroidFile myRootDir;
+	private AndroidFile cordovaRoot;
 
 	// ==================================================
 	// File server code
@@ -888,14 +890,18 @@ public class NanoHTTPD
 			if ( uri.startsWith( ".." ) || uri.endsWith( ".." ) || uri.indexOf( "../" ) >= 0 )
 				res = new Response( HTTP_FORBIDDEN, MIME_PLAINTEXT,
 						"FORBIDDEN: Won't serve ../ for security reasons." );
-
-			// XXX HACKHACK serve cordova.js from the containing folder
-			if (uri.equals("cordova.js")) {
-				uri = "../cordova.js";	
-			}
 		}
 
-		AndroidFile f = new AndroidFile( homeDir, uri );
+
+		AndroidFile f;
+
+		// XXX HACKHACK serve cordova.js from the cordovaRoot folder
+		if (uri.equals("cordova.js") || uri.equals("cordova_plugins.js" || uri.startsWith("plugins/"))) {
+			f = new AndroidFile(cordovaRoot, uri);
+		} else {
+			f = new AndroidFile( homeDir, uri );
+		}
+
 		if ( res == null && !f.exists())
 			res = new Response( HTTP_NOTFOUND, MIME_PLAINTEXT,
 					"Error 404, file not found." );
