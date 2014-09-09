@@ -164,6 +164,40 @@ static const int httpLogLevel = HTTP_LOG_LEVEL_INFO; // | HTTP_LOG_FLAG_TRACE;
 	
 }
 
+- (NSString *)cordovajsRoot
+{
+	__block NSString *result;
+	
+	dispatch_sync(serverQueue, ^{
+		result = cordovajsRoot;
+	});
+	
+	return result;
+}
+
+- (void)setCordovajsRoot:(NSString *)value
+{
+	HTTPLogTrace();
+	
+	// Document root used to be of type NSURL.
+	// Add type checking for early warning to developers upgrading from older versions.
+	
+	if (value && ![value isKindOfClass:[NSString class]])
+	{
+		HTTPLogWarn(@"%@: %@ - Expecting NSString parameter, received %@ parameter",
+					THIS_FILE, THIS_METHOD, NSStringFromClass([value class]));
+		return;
+	}
+	
+	NSString *valueCopy = [value copy];
+	
+	dispatch_async(serverQueue, ^{
+		cordovajsRoot = valueCopy;
+	});
+	
+}
+
+
 /**
  * The connection class is the class that will be used to handle connections.
  * That is, when a new connection is created, an instance of this class will be intialized.
@@ -541,7 +575,7 @@ static const int httpLogLevel = HTTP_LOG_LEVEL_INFO; // | HTTP_LOG_FLAG_TRACE;
 	// Try the apache benchmark tool (already installed on your Mac):
 	// $  ab -n 1000 -c 1 http://localhost:<port>/some_path.html
 	
-	return [[HTTPConfig alloc] initWithServer:self documentRoot:documentRoot queue:connectionQueue];
+  return [[HTTPConfig alloc] initWithServer:self documentRoot:documentRoot queue:connectionQueue cordovajsRoot:cordovajsRoot];
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didAcceptNewSocket:(GCDAsyncSocket *)newSocket

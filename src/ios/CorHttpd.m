@@ -13,6 +13,7 @@
 
 @property(nonatomic, retain) HTTPServer *httpServer;
 @property(nonatomic, retain) NSString *localPath;
+@property(nonatomic, retain) NSString *cordovajsRoot;
 @property(nonatomic, retain) NSString *url;
 @property (assign) int port;
 
@@ -100,6 +101,7 @@
     self.httpServer = nil;
     self.localPath = @"";
     self.url = @"";
+    self.cordovajsRoot = nil;
 }
 
 - (void)startServer:(CDVInvokedUrlCommand*)command
@@ -107,6 +109,11 @@
     CDVPluginResult* pluginResult = nil;
     NSString* wwwRoot = [command.arguments objectAtIndex:0];
     int port = [[command.arguments objectAtIndex:1] intValue];
+    // XXX addition
+    NSString* cordovajsRoot = [command.arguments objectAtIndex:2];
+
+    // XXX addition
+    self.cordovajsRoot = cordovajsRoot;
 
     if(self.httpServer != nil) {
         if([self.httpServer isRunning]) {
@@ -146,6 +153,7 @@
     }
     NSLog(@"Setting document root: %@", self.localPath);
     [self.httpServer setDocumentRoot:self.localPath];
+    [self.httpServer setCordovajsRoot:self.cordovajsRoot];
     
 	NSError *error;
 	if([self.httpServer start:&error]) {
@@ -175,6 +183,8 @@
         
         self.localPath = @"";
         self.url = @"";
+
+        self.cordovajsRoot = nil;
         
         NSLog(@"httpd stopped");
     }

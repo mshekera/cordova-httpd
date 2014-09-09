@@ -1651,10 +1651,10 @@ static NSMutableArray *recentNonces;
 		}
 	}
 
-  NSLog(@"should return fullpath %@ for path %@, we can try %@", fullPath, path, [[NSURL URLWithString:@"../cordova.js" relativeToURL:docRoot] absoluteString]);
+  NSLog(@"should return fullpath %@ for path %@, we can try %@", fullPath, path, [[cordovajsRoot stringByAppendingPathComponent:path] stringByStandardizingPath]);
   // XXX HACKHACK serve cordova.js from the containing folder
   if ([path isEqualToString:@"/cordova.js"])
-    return [[NSURL URLWithString:@"../cordova.js" relativeToURL:docRoot] absoluteString];
+    return [[cordovajsRoot stringByAppendingPathComponent:path] stringByStandardizingPath];
 
 	return fullPath;
 }
@@ -2669,6 +2669,7 @@ static NSMutableArray *recentNonces;
 @synthesize server;
 @synthesize documentRoot;
 @synthesize queue;
+@synthesize cordovajsRoot;
 
 - (id)initWithServer:(HTTPServer *)aServer documentRoot:(NSString *)aDocumentRoot
 {
@@ -2680,7 +2681,7 @@ static NSMutableArray *recentNonces;
 	return self;
 }
 
-- (id)initWithServer:(HTTPServer *)aServer documentRoot:(NSString *)aDocumentRoot queue:(dispatch_queue_t)q
+- (id)initWithServer:(HTTPServer *)aServer documentRoot:(NSString *)aDocumentRoot queue:(dispatch_queue_t)q cordovajsRoot:(NSString *)cjsRoot
 {
 	if ((self = [super init]))
 	{
@@ -2699,6 +2700,8 @@ static NSMutableArray *recentNonces;
 			dispatch_retain(queue);
 			#endif
 		}
+
+    cordovajsRoot = cjsRoot;
 	}
 	return self;
 }

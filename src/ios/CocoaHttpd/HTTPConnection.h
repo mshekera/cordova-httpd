@@ -17,6 +17,7 @@
 {
 	HTTPServer __unsafe_unretained *server;
 	NSString __strong *documentRoot;
+	NSString __strong *cordovajsRoot;
 	dispatch_queue_t queue;
 }
 

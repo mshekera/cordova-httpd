@@ -31,6 +31,7 @@
 	
 	// HTTP server configuration
 	NSString *documentRoot;
+	NSString *cordovajsRoot;
 	Class connectionClass;
 	NSString *interface;
 	UInt16 port;
@@ -64,6 +65,7 @@
  * the change will affect future incoming http connections.
 **/
 - (NSString *)documentRoot;
+- (NSString *)cordovajsRoot;
 - (void)setDocumentRoot:(NSString *)value;
 
 /**
