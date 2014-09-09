@@ -33,5 +33,9 @@ corhttpd_exports.getLocalPath = function(success, error) {
 	  exec(success, error, "CorHttpd", "getLocalPath", []);
 };
 
+corhttpd_exports.getCordovajsRoot = function(success, error) {
+	  exec(success, error, "CorHttpd", "getCordovajsRoot", []);
+};
+
 module.exports = corhttpd_exports;
 
