@@ -13,6 +13,7 @@
 
 @property(nonatomic, retain) HTTPServer *httpServer;
 @property(nonatomic, retain) NSString *localPath;
+@property(nonatomic, retain) NSString *cordovajsRoot;
 @property(nonatomic, retain) NSString *url;
 @property (assign) int port;
 
@@ -20,6 +21,7 @@
 - (void)stopServer:(CDVInvokedUrlCommand*)command;
 - (void)getURL:(CDVInvokedUrlCommand*)command;
 - (void)getLocalPath:(CDVInvokedUrlCommand*)command;
+- (void)getCordovajsRoot:(CDVInvokedUrlCommand*)command;
 
 - (NSDictionary *)getIPAddresses;
 - (NSString *)getIPAddress:(BOOL)preferIPv4;
@@ -100,6 +102,7 @@
     self.httpServer = nil;
     self.localPath = @"";
     self.url = @"";
+    self.cordovajsRoot = nil;
 }
 
 - (void)startServer:(CDVInvokedUrlCommand*)command
@@ -107,6 +110,11 @@
     CDVPluginResult* pluginResult = nil;
     NSString* wwwRoot = [command.arguments objectAtIndex:0];
     int port = [[command.arguments objectAtIndex:1] intValue];
+    // XXX addition
+    NSString* cordovajsRoot = [command.arguments objectAtIndex:2];
+
+    // XXX addition
+    self.cordovajsRoot = cordovajsRoot;
 
     if(self.httpServer != nil) {
         if([self.httpServer isRunning]) {
@@ -146,6 +154,7 @@
     }
     NSLog(@"Setting document root: %@", self.localPath);
     [self.httpServer setDocumentRoot:self.localPath];
+    [self.httpServer setCordovajsRoot:self.cordovajsRoot];
     
 	NSError *error;
 	if([self.httpServer start:&error]) {
@@ -175,6 +184,8 @@
         
         self.localPath = @"";
         self.url = @"";
+
+        self.cordovajsRoot = nil;
         
         NSLog(@"httpd stopped");
     }
@@ -194,6 +205,12 @@
 {
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
                                                       messageAsString:(self.localPath ? self.localPath : @"")];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)getCordovajsRoot:(CDVInvokedUrlCommand*)command {
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                                      messageAsString:(self.cordovajsRoot ? self.cordovajsRoot : @"")];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
