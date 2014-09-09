@@ -221,10 +221,11 @@ public class NanoHTTPD
 	 * Starts a HTTP server to given port.<p>
 	 * Throws an IOException if the socket is already in use
 	 */
-	public NanoHTTPD( int port, AndroidFile wwwroot ) throws IOException
+	public NanoHTTPD( int port, AndroidFile wwwroot, String cordovaRoot ) throws IOException
 	{
 		myTcpPort = port;
 		this.myRootDir = wwwroot;
+		this.cordovaRoot = cordovaRoot;
 		myServerSocket = new ServerSocket( myTcpPort );
 		myThread = new Thread( new Runnable()
 		{
@@ -287,7 +288,7 @@ public class NanoHTTPD
 
 		try
 		{
-			new NanoHTTPD( port, new AndroidFile(wwwroot.getPath()) );
+			new NanoHTTPD( port, new AndroidFile(wwwroot.getPath()), null );
 		}
 		catch( IOException ioe )
 		{
@@ -858,6 +859,7 @@ public class NanoHTTPD
 	private final ServerSocket myServerSocket;
 	private Thread myThread;
 	private AndroidFile myRootDir;
+	private String cordovaRoot;
 
 	// ==================================================
 	// File server code
@@ -875,7 +877,7 @@ public class NanoHTTPD
 		// Make sure we won't die of an exception later
 		if ( !homeDir.isDirectory())
 			res = new Response( HTTP_INTERNALERROR, MIME_PLAINTEXT,
-					"INTERNAL ERRROR: serveFile(): given homeDir is not a directory." );
+					"INTERNAL ERRROR: serveFile(): given homeDir is not a directory: " + homeDir.getAbsolutePath() );
 
 		if ( res == null )
 		{
@@ -890,10 +892,26 @@ public class NanoHTTPD
 						"FORBIDDEN: Won't serve ../ for security reasons." );
 		}
 
-		AndroidFile f = new AndroidFile( homeDir, uri );
-		if ( res == null && !f.exists())
+
+		AndroidFile f;
+
+		// XXX HACKHACK serve cordova.js from the cordovaRoot folder
+		if (uri.equals("/cordova.js") || uri.equals("/cordova_plugins.js") || uri.startsWith("/plugins/")) {
+			Log.d(LOGTAG, "redirecting for cordova stuff: " + uri);
+			f = new AndroidFile(homeDir.getAbsolutePath() + "/.." + uri);
+			Log.d(LOGTAG, "cordova root: " + f.getAbsolutePath());
+		} else {
+			Log.d(LOGTAG, "not redirecting: " + uri);
+			Log.d(LOGTAG, "home dir: " + homeDir.getAbsolutePath());
+			f = new AndroidFile( homeDir, uri );
+		}
+    Log.d(LOGTAG, ">>> file string: " + f.getAbsolutePath());
+
+		if ( res == null && !f.exists()) {
+			Log.d(LOGTAG, "FILE NOT FOUND " + f.toString());
 			res = new Response( HTTP_NOTFOUND, MIME_PLAINTEXT,
 					"Error 404, file not found." );
+		}
 
 		// List the directory, if necessary
 		if ( res == null && f.isDirectory())

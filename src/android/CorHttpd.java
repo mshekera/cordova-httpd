@@ -40,9 +40,11 @@ public class CorHttpd extends CordovaPlugin {
     
     private static final int	WWW_ROOT_ARG_INDEX = 0;
     private static final int	PORT_ARG_INDEX = 1;
+    private static final int    CORDOVA_ROOT_ARG_INDEX = 2;
     
 	private String localPath = "";
 	private int port = 8080;
+    private String cordovaRoot = "";
 
 	private WebServer server = null;
 	private String	url = "";
@@ -97,11 +99,13 @@ public class CorHttpd extends CordovaPlugin {
     private PluginResult startServer(JSONArray inputs, CallbackContext callbackContext) {
 		Log.w(LOGTAG, "startServer");
 
-		final String docRoot; 
+		final String docRoot;
+
         // Get the input data.
         try {
         	docRoot = inputs.getString( WWW_ROOT_ARG_INDEX );
             port = inputs.getInt( PORT_ARG_INDEX );
+            cordovaRoot = inputs.getString( CORDOVA_ROOT_ARG_INDEX );
         } catch (JSONException exception) {
             Log.w(LOGTAG, String.format("JSON Exception: %s", exception.getMessage()));
             callbackContext.error( exception.getMessage() );
@@ -146,7 +150,7 @@ public class CorHttpd extends CordovaPlugin {
 			AssetManager am = ctx.getResources().getAssets();
     		f.setAssetManager( am );
     		
-			server = new WebServer(port, f);
+			server = new WebServer(port, f, cordovaRoot);
 		} catch (IOException e) {
 			errmsg = String.format("IO Exception: %s", e.getMessage());
 			Log.w(LOGTAG, errmsg);
