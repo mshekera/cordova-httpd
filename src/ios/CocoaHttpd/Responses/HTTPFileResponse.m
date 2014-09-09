@@ -234,4 +234,13 @@ static const int httpLogLevel = HTTP_LOG_LEVEL_WARN; // | HTTP_LOG_FLAG_TRACE;
 	
 }
 
+- (NSDictionary *)httpHeaders
+{
+  NSString *key = @"Access-Control-Allow-Origin";
+  NSString *value = @"*";
+
+  return [NSDictionary dictionaryWithObjectsAndKeys:value, key, nil];
+}
+
 @end
+
