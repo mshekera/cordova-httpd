@@ -906,9 +906,11 @@ public class NanoHTTPD
 			f = new AndroidFile( homeDir, uri );
 		}
 
-		if ( res == null && !f.exists())
+		if ( res == null && !f.exists()) {
+			Log.d(LOGTAG, "FILE NOT FOUND");
 			res = new Response( HTTP_NOTFOUND, MIME_PLAINTEXT,
 					"Error 404, file not found." );
+		}
 
 		// List the directory, if necessary
 		if ( res == null && f.isDirectory())
