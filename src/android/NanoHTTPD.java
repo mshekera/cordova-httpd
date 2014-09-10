@@ -221,7 +221,7 @@ public class NanoHTTPD
 	 * Starts a HTTP server to given port.<p>
 	 * Throws an IOException if the socket is already in use
 	 */
-	public NanoHTTPD( int port, AndroidFile wwwroot, AndroidFile cordovaRoot ) throws IOException
+	public NanoHTTPD( int port, AndroidFile wwwroot, String cordovaRoot ) throws IOException
 	{
 		myTcpPort = port;
 		this.myRootDir = wwwroot;
@@ -859,7 +859,7 @@ public class NanoHTTPD
 	private final ServerSocket myServerSocket;
 	private Thread myThread;
 	private AndroidFile myRootDir;
-	private AndroidFile cordovaRoot;
+	private String cordovaRoot;
 
 	// ==================================================
 	// File server code
@@ -898,7 +898,7 @@ public class NanoHTTPD
 		// XXX HACKHACK serve cordova.js from the cordovaRoot folder
 		if (uri.equals("/cordova.js") || uri.equals("/cordova_plugins.js") || uri.startsWith("/plugins/")) {
 			Log.d(LOGTAG, "redirecting for cordova stuff: " + uri);
-			Log.d(LOGTAG, "cordova root: " + cordovaRoot.getAbsolutePath());
+			Log.d(LOGTAG, "cordova root: " + cordovaRoot);
 			f = new AndroidFile(cordovaRoot, uri);
 		} else {
 			Log.d(LOGTAG, "not redirecting: " + uri);
