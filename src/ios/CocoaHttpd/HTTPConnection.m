@@ -1652,8 +1652,8 @@ static NSMutableArray *recentNonces;
 		}
 	}
 
-  NSLog(@"should return fullpath %@ for path %@, we can try %@", fullPath, path, [[cordovajsRoot stringByAppendingPathComponent:path] stringByStandardizingPath]);
-  NSLog(@"cordovajsRoot %@", cordovajsRoot);
+  //NSLog(@"should return fullpath %@ for path %@, we can try %@", fullPath, path, [[cordovajsRoot stringByAppendingPathComponent:path] stringByStandardizingPath]);
+  //NSLog(@"cordovajsRoot %@", cordovajsRoot);
   // XXX HACKHACK serve cordova.js from the containing folder
   if ([path isEqualToString:@"/cordova.js"] || [path isEqualToString:@"/cordova_plugins.js"] || [path hasPrefix:@"/plugins/"])
     return [[cordovajsRoot stringByAppendingPathComponent:path] stringByStandardizingPath];
