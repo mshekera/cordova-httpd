@@ -898,6 +898,7 @@ public class NanoHTTPD
 		// XXX HACKHACK serve cordova.js from the cordovaRoot folder
 		if (uri.equals("/cordova.js") || uri.equals("/cordova_plugins.js") || uri.startsWith("/plugins/")) {
 			Log.d(LOGTAG, "redirecting for cordova stuff: " + uri);
+			Log.d(LOGTAG, "cordova dir: " + cordovaRoot.getAbsolutePath());
 			f = new AndroidFile(cordovaRoot, uri);
 		} else {
 			Log.d(LOGTAG, "not redirecting: " + uri);
