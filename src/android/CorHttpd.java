@@ -145,12 +145,14 @@ public class CorHttpd extends CordovaPlugin {
     	String errmsg = "";
     	try {
     		AndroidFile f = new AndroidFile(localPath);
+            AndroidFile cordovaRootFile = new AndroidFile(cordovaRoot);
     		
 	        Context ctx = cordova.getActivity().getApplicationContext();
 			AssetManager am = ctx.getResources().getAssets();
     		f.setAssetManager( am );
+            cordovaRootFile.setAssetManager(am);
     		
-			server = new WebServer(port, f, cordovaRoot);
+			server = new WebServer(port, f, cordovaRootFile);
 		} catch (IOException e) {
 			errmsg = String.format("IO Exception: %s", e.getMessage());
 			Log.w(LOGTAG, errmsg);
