@@ -46,7 +46,7 @@
     @[ IOS_WIFI @"/" IP_ADDR_IPv6, IOS_WIFI @"/" IP_ADDR_IPv4, IOS_CELLULAR @"/" IP_ADDR_IPv6, IOS_CELLULAR @"/" IP_ADDR_IPv4 ] ;
     
     NSDictionary *addresses = [self getIPAddresses];
-    NSLog(@"addresses: %@", addresses);
+    NSLog(@"HTTPD DEBUG addresses: %@", addresses);
     
     __block NSString *address;
     [searchArray enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop)
@@ -152,21 +152,21 @@
         NSString* basePath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"www"];
         self.localPath = [NSString stringWithFormat:@"%@/%@", basePath, wwwRoot];
     }
-    NSLog(@"Setting document root: %@", self.localPath);
+    NSLog(@"HTTPD DEBUG Setting document root: %@", self.localPath);
     [self.httpServer setDocumentRoot:self.localPath];
     [self.httpServer setCordovajsRoot:self.cordovajsRoot];
     
 	NSError *error;
 	if([self.httpServer start:&error]) {
         int listenPort = [self.httpServer listeningPort];
-		NSLog(@"Started httpd on port %d", listenPort);
+		NSLog(@"HTTPD DEBUG Started httpd on port %d", listenPort);
         
         NSString* ip = [self getIPAddress:YES];
         self.url = [NSString stringWithFormat:@"http://%@:%d/", ip, listenPort];
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:self.url];
         
 	} else {
-		NSLog(@"Error starting httpd: %@", error);
+		NSLog(@"HTTPD DEBUG Error starting httpd: %@", error);
         
         NSString* errmsg = [error description];
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:errmsg];
@@ -187,7 +187,7 @@
 
         self.cordovajsRoot = nil;
         
-        NSLog(@"httpd stopped");
+        NSLog(@"HTTPD DEBUG httpd stopped");
     }
     
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
