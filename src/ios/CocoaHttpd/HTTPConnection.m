@@ -1675,7 +1675,7 @@ static NSMutableArray *recentNonces;
 	// Override me to provide custom responses.
 	
 	NSString *filePath = [self filePathForURI:path allowDirectory:NO];
-	
+
 	BOOL isDir = NO;
 	
 	if (filePath && [[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:&isDir] && !isDir)
@@ -1687,6 +1687,10 @@ static NSMutableArray *recentNonces;
 		
 	//	return [[[HTTPAsyncFileResponse alloc] initWithFilePath:filePath forConnection:self] autorelease];
 	}
+
+  // XXX HACKHACK if the file not found, return the root page
+  filePath = [self filePathForURI:@"/" allowDirectory:NO];
+  return [[HTTPFileResponse alloc] initWithFilePath:filePath forConnection:self];
 	
 	return nil;
 }
