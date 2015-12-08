@@ -75,7 +75,7 @@ public class NanoHTTPD
 	private final String LOGTAG = "CorHttpd";
 
 	private AssetManager assetManager;
-	
+
 	// ==================================================
 	// API parts
 	// ==================================================
@@ -102,14 +102,14 @@ public class NanoHTTPD
 			String value = (String)e.nextElement();
 			Log.i( LOGTAG, "  HDR: '" + value + "' = '" + header.getProperty( value ) + "'" );
 		}
-		
+
 		e = parms.propertyNames();
 		while ( e.hasMoreElements())
 		{
 			String value = (String)e.nextElement();
 			Log.i( LOGTAG, "  PRM: '" + value + "' = '" + parms.getProperty( value ) + "'" );
 		}
-		
+
 		e = files.propertyNames();
 		while ( e.hasMoreElements())
 		{
@@ -223,7 +223,7 @@ public class NanoHTTPD
 	/**
 	 * Starts a HTTP server to given port.<p>
 	 * Throws an IOException if the socket is already in use
-	 * @param assetManager 
+	 * @param assetManager
 	 */
 	public NanoHTTPD( int port, AndroidFile wwwroot, String cordovaRoot, AssetManager assetManager ) throws IOException
 	{
@@ -232,7 +232,7 @@ public class NanoHTTPD
 		this.cordovaRoot = cordovaRoot;
 		myServerSocket = new ServerSocket( myTcpPort );
 		this.assetManager = assetManager;
-		
+
 		myThread = new Thread( new Runnable()
 		{
 			public void run()
@@ -272,7 +272,7 @@ public class NanoHTTPD
 	{
 		PrintStream myOut = System.out;
 		PrintStream myErr = System.err;
-		
+
 		myOut.println( "NanoHTTPD 1.25 (C) 2001,2005-2011 Jarno Elonen and (C) 2010 Konstantinos Togias\n" +
 				"(Command line options: [-p port] [-d root-dir] [--licence])\n" );
 
@@ -1080,6 +1080,8 @@ public class NanoHTTPD
 		response.addHeader("Accept-Ranges", "bytes"); // Announce that the file
 													// server accepts partial
 													// content requestes
+		response.addHeader("Access-Control-Allow-Origin", "http://meteor.local");
+		// Allow xhr requests from Meteor Cordova app
 		return response;
 	}
 
@@ -1120,7 +1122,7 @@ public class NanoHTTPD
 	}
 
 	private static int theBufferSize = 16 * 1024;
-	
+
 	/**
 	 * GMT date formatter
 	 */
@@ -1161,4 +1163,3 @@ public class NanoHTTPD
 					"(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE\n"+
 					"OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.";
 }
-
